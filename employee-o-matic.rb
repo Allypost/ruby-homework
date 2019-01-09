@@ -7,6 +7,10 @@ class Employee
     @id = id
   end
 
+  def forename
+    @full_name.split(' ', 2).first
+  end
+
   def surname
     @full_name.split(' ', 2).last
   end
@@ -47,14 +51,37 @@ def edit_employee(employees)
   edit_property(employee, :id, 'ID')
 end
 
+def get_sort_key
+  print 'Sort by [f]irst name or [l]ast name? '
+  key = gets.chomp.downcase
+
+  case key
+  when 'f' then
+    :forename
+  when 'l' then
+    :surname
+  else
+    nil
+  end
+end
+
 def view_employees(employees)
-  sorted_employees(employees).each do |employee|
+  key = get_sort_key
+
+  while key.nil?
+    puts 'Unknown field. Please try again.'
+    key = get_sort_key
+  end
+
+  sorted_employees(employees, key).each do |employee|
     puts "#{employee.full_name}, #{employee.id}"
   end
 end
 
-def sorted_employees(employees)
-  employees.sort_by(&:surname)
+def sorted_employees(employees, key)
+  employees.sort_by do |employee|
+    employee.send(key)
+  end
 end
 
 def quit

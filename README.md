@@ -13,4 +13,4 @@ A repository I will use to solve my Ruby homework as part of the [learn.rb](http
 - _C_
 
 Favourite dog breed:
-[Alaskan Malamute](https://cdn2-www.dogtime.com/assets/uploads/2011/01/file_22908_alaskan-malamute-460x290.jpg)
+![Alaskan Malamute](https://cdn2-www.dogtime.com/assets/uploads/2011/01/file_22908_alaskan-malamute-460x290.jpg)

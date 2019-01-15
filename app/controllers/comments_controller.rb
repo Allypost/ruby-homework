@@ -26,14 +26,14 @@ class CommentsController < ApplicationController
   def create
     captcha = params['captcha']
 
-    unless captcha
+    if captcha.nil?
       flash[:error] = 'Captcha is required!'
       return redirect_back(fallback_location: root_path)
     end
 
     x, y, z, n, result = captcha.values_at('x', 'y', 'z', 'n', 'result').map(&:to_i)
 
-    unless n == result && x + y - z == n
+    unless n.between?(100, 999) && n == result && x + y - z == n
       flash[:error] = 'Invalid captcha response. Please try again.'
       return redirect_back(fallback_location: root_path)
     end

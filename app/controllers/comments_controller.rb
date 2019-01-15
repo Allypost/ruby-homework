@@ -24,6 +24,20 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.json
   def create
+    captcha = params['captcha']
+
+    if captcha.nil?
+      flash[:error] = 'Captcha is required!'
+      return redirect_back(fallback_location: root_path)
+    end
+
+    x, y, z, n, result = captcha.values_at('x', 'y', 'z', 'n', 'result').map(&:to_i)
+
+    unless n.between?(100, 999) && n == result && x + y - z == n
+      flash[:error] = 'Invalid captcha response. Please try again.'
+      return redirect_back(fallback_location: root_path)
+    end
+
     @comment = Comment.new(comment_params)
 
     respond_to do |format|
@@ -62,13 +76,14 @@ class CommentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_comment
-      @comment = Comment.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def comment_params
-      params.require(:comment).permit(:post_id, :author_id, :content)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_comment
+    @comment = Comment.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def comment_params
+    params.require(:comment).permit(:post_id, :author_id, :content)
+  end
 end

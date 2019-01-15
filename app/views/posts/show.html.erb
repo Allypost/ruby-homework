@@ -20,7 +20,16 @@
 </p>
 
 <%= simple_form_for Comment.new do |f| %>
+  <% @captcha.each do |key, value| %>
+    <%= hidden_field(:captcha, key, :value => value) %>
+  <% end %>
+
   <%= f.input :content %>
+  <p>
+    Please fill in the captcha:
+    <%= @captcha[:x] %> + <%= @captcha[:y] %> - <%= @captcha[:z] %> =
+    <%= number_field(:captcha, :result, :value => '', :min => 100, :max => 999) %>
+  </p>
   <%= f.button :submit %>
 <% end %>
 
